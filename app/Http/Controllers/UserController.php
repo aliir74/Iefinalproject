@@ -67,6 +67,15 @@ class UserController extends Controller
         $response = ['ok'=>true, 'result'=>$leaderboard];
         return ['response'=>$response];
     }
+
+    public function comments($gameTitle) {
+        $gameId = Game::where('title', $gameTitle)->get()[0]['id'];
+        $comments = Comment::with(['game', 'user'])->where('game_id', '=', $gameId)->orderBy('created_at', 'desc')->take(5)->get();
+        $comments = ['comments'=>$comments];
+        $response = ['ok'=>true, 'result'=>$comments];
+        return ['response'=>$response];
+    }
+
     public function show($id)
     {
         return view('user.profile', ['user' => User::findOrFail($id)]);
