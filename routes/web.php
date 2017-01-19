@@ -20,6 +20,7 @@ Route::get('/', function () {
 Route::get('/F95/home', 'UserController@home');
 Route::get('/F95/games/{gameTitle}/header', 'UserController@header');
 Route::get('/F95/games/{gameTitle}/info', 'UserController@info');
+Route::get('/F95/games/{gameTitle}/leaderboard', 'UserController@leaderboard');
 
 
 

@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use App\Leaderboard;
 use App\User;
 use App\Game;
 use App\Http\Controllers\Controller;
@@ -60,6 +61,12 @@ class UserController extends Controller
         return ['response'=>$response];
     }
 
+    public function leaderboard($gameTitle) {
+        $leaderboard = Leaderboard::with(['user'])->orderBy('score', 'desc')->take(10)->get();
+        $leaderboard = ['leaderboard'=>$leaderboard];
+        $response = ['ok'=>true, 'result'=>$leaderboard];
+        return ['response'=>$response];
+    }
     public function show($id)
     {
         return view('user.profile', ['user' => User::findOrFail($id)]);
