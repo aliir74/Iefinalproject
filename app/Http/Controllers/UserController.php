@@ -50,6 +50,16 @@ class UserController extends Controller
         return ['response'=>$response];
     }
 
+    public function info($gameTitle) {
+        $game = (Game::where('title', $gameTitle)->get())[0];
+        $categories = $game['categories'];
+        $categories = explode('،', $categories);
+        $game['categories'] = $categories;
+        $game = ['game'=>$game];
+        $response = ['ok'=>true, 'result'=>$game];
+        return ['response'=>$response];
+    }
+
     public function show($id)
     {
         return view('user.profile', ['user' => User::findOrFail($id)]);
