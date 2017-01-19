@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+//Route::get('/test', 'UserController@test');
+
+Route::get('/F95/home', 'UserController@home');
+
+
+
