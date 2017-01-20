@@ -41,6 +41,8 @@ Route::get('/logout','Auth\LoginController@logout');
 //Route::get('/logout', 'HomeController@logout');
 
 Auth::routes();
+Route::get('user/activation/{token}', 'Auth\AuthController@activateUser')->name('user.activate');
+
 
 Route::get('/home', 'HomeController@index');
 Route::get('/games', 'HomeController@games');
