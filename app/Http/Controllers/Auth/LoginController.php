@@ -37,5 +37,14 @@ class LoginController extends Controller
         $this->middleware('guest', ['except' => 'logout']);
     }
 
+    protected function validator(array $data)
+    {
+        $messages = [
+            'captcha' => 'your captcha is incorrect!'
+        ];
+        return Validator::make($data, [
+            'captcha' => 'required|captcha'
+        ], $messages);
 
+    }
 }
