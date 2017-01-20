@@ -22,6 +22,10 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+        Schema::table('users', function ($table) {
+            $table->string('avatar')->default('http://www.hbc333.com/data/out/190/47129950-profile-pictures.jpgm')->change();
+        });
     }
 
     /**
