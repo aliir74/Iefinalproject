@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use App\Leaderboard;
+use App\Relatedgame;
 use App\User;
 use App\Game;
 use App\Http\Controllers\Controller;
@@ -64,6 +65,7 @@ class UserController extends Controller
     }
 
     public function leaderboard($gameTitle) {
+        //user handle nemishe tooye javab
         $gameId = Game::where('title', $gameTitle)->get()[0]['id'];
         $leaderboard = Leaderboard::with(['user', 'game'])->where('game_id', $gameId)->orderBy('score', 'desc')->take(10)->get();
 
@@ -79,6 +81,8 @@ class UserController extends Controller
             if($tmp == false) {
                 $leaderboard[] = $userRecord[0];
             }
+        } else {
+            $leaderboard = Leaderboard::with(['user', 'game'])->where('game_id', $gameId)->orderBy('score', 'desc')->take(10)->get();
         }
         $leaderboard = ['leaderboard'=>$leaderboard];
         $response = ['ok'=>true, 'result'=>$leaderboard];
@@ -118,6 +122,14 @@ class UserController extends Controller
         $response = ['ok'=>true, 'result'=>$games];
         return ['response'=>$response];
 
+    }
+
+    public function related_games($gameTitle) {
+        $gameId = Game::where('title', $gameTitle)->get()[0]['id'];
+        $relateds = Relatedgame::with(['game'])->where('maingame_id', $gameId)->get();
+        $games = ['game'=>$relateds];
+        $response = ['ok'=>true, 'result'=>$games];
+        return ['response'=>$response];
     }
     public function show($id)
     {

@@ -30,8 +30,11 @@
                         </a>
                     </div>
                     <ul class="nav navbar-nav">
-
-                        <li><a class="blackhover" href="hw2/Codes/html/login.html"> ورود <i class="fa fa-user" aria-hidden="true"></i> </a></li>
+                        @if (Auth::guest())
+                            <li><a class="blackhover" href="/login"> ورود <i class="fa fa-user" aria-hidden="true"></i> </a></li>
+                            @else
+                                <!--<li><a class="blackhover" href="#"> Auth::user()->name <i class="fa fa-user" aria-hidden="true"></i> </a></li>-->
+                            @endif
 
                     </ul>
                     <form class="navbar-form navbar-left">

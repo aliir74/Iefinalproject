@@ -23,7 +23,7 @@ Route::get('/F95/games/{gameTitle}/info', 'UserController@info');
 Route::get('/F95/games/{gameTitle}/leaderboard', 'UserController@leaderboard');
 Route::get('/F95/games/{gameTitle}/comments', 'UserController@comments');
 Route::get('/F95/games', 'UserController@search');
-
+Route::get('/F95/games/{gameTitle}/related_games', 'UserController@related_games');
 
 
 
