@@ -70,12 +70,22 @@ class UserController extends Controller
         return ['response'=>$response];
     }
 
-    public function comments($gameTitle) {
-        $gameId = Game::where('title', $gameTitle)->get()[0]['id'];
-        $comments = Comment::with(['game', 'user'])->where('game_id', '=', $gameId)->orderBy('created_at', 'desc')->take(5)->get();
-        $comments = ['comments'=>$comments];
-        $response = ['ok'=>true, 'result'=>$comments];
-        return ['response'=>$response];
+    public function comments($gameTitle, Request $request) {
+        if($request->has('offset')) {
+            $offset = $request->get('offset');
+            $gameId = Game::where('title', $gameTitle)->get()[0]['id'];
+            $comments = Comment::with(['game', 'user'])->where('game_id', '=', $gameId)->orderBy('created_at', 'desc')->take(3 + $offset)->get();
+            $slice = array_slice($comments->toArray(), 3);
+            $slice = ['comments' => $slice];
+            $response = ['ok' => true, 'result' => $slice];
+            return ['response' => $response];
+        } else {
+            $gameId = Game::where('title', $gameTitle)->get()[0]['id'];
+            $comments = Comment::with(['game', 'user'])->where('game_id', '=', $gameId)->orderBy('created_at', 'desc')->take(3)->get();
+            $comments = ['comments' => $comments];
+            $response = ['ok' => true, 'result' => $comments];
+            return ['response' => $response];
+        }
     }
 
     public function search(Request $request) {
