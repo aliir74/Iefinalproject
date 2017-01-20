@@ -13,6 +13,7 @@ use App\Leaderboard;
 use App\User;
 use App\Game;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -62,6 +63,7 @@ class UserController extends Controller
     }
 
     public function leaderboard($gameTitle) {
+
         $leaderboard = Leaderboard::with(['user'])->orderBy('score', 'desc')->take(10)->get();
         $leaderboard = ['leaderboard'=>$leaderboard];
         $response = ['ok'=>true, 'result'=>$leaderboard];
@@ -76,6 +78,22 @@ class UserController extends Controller
         return ['response'=>$response];
     }
 
+    public function search(Request $request) {
+        if($request->has('q'))
+            $q = $request->get('q');
+        $games = Game::where('title', 'LIKE', '%'.$q.'%')->get();
+        $newCollection = collect($games);
+        $edited = $newCollection->map(function ($item, $key) {
+            $categories = $item['categories'];
+            $categories = explode('،', $categories);
+            $item['categories'] = $categories;
+            return $item;
+        });
+        $games = ['game'=>$edited];
+        $response = ['ok'=>true, 'result'=>$games];
+        return ['response'=>$response];
+
+    }
     public function show($id)
     {
         return view('user.profile', ['user' => User::findOrFail($id)]);
