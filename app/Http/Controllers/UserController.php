@@ -14,6 +14,7 @@ use App\User;
 use App\Game;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -65,6 +66,20 @@ class UserController extends Controller
     public function leaderboard($gameTitle) {
 
         $leaderboard = Leaderboard::with(['user'])->orderBy('score', 'desc')->take(10)->get();
+
+        if(!(Auth::guest())) {
+            $userRecord = Leaderboard::with(['user'])->where('user_id', Auth::user()->id)->get();
+            $tmp = false;
+            for($i = 0; $i < count($leaderboard->toArray()); $i++) {
+                if($leaderboard->toArray()[$i] == $userRecord->toArray()[0]) {
+                    $tmp = true;
+                    break;
+                }
+            }
+            if($tmp == false) {
+                $leaderboard[] = $userRecord[0];
+            }
+        }
         $leaderboard = ['leaderboard'=>$leaderboard];
         $response = ['ok'=>true, 'result'=>$leaderboard];
         return ['response'=>$response];
