@@ -64,11 +64,11 @@ class UserController extends Controller
     }
 
     public function leaderboard($gameTitle) {
-
-        $leaderboard = Leaderboard::with(['user'])->orderBy('score', 'desc')->take(10)->get();
+        $gameId = Game::where('title', $gameTitle)->get()[0]['id'];
+        $leaderboard = Leaderboard::with(['user', 'game'])->where('game_id', $gameId)->orderBy('score', 'desc')->take(10)->get();
 
         if(!(Auth::guest())) {
-            $userRecord = Leaderboard::with(['user'])->where('user_id', Auth::user()->id)->get();
+            $userRecord = Leaderboard::with(['user', 'game'])->where('game_id', $gameId)->where('user_id', Auth::user()->id)->get();
             $tmp = false;
             for($i = 0; $i < count($leaderboard->toArray()); $i++) {
                 if($leaderboard->toArray()[$i] == $userRecord->toArray()[0]) {
