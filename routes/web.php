@@ -32,7 +32,8 @@ Auth::routes();
 //Auth::logout();
 
 
-Route::get('/home', 'HomeController@index');
+//Route::get('/home', 'HomeController@index');
+Route::get('/', 'HomeController@index');
 //Route::get('/logout', 'auth\LoginController@logout');
 Route::get('/logout','Auth\LoginController@logout');
 //Route::get('/logout', 'HomeController@logout');
@@ -40,3 +41,4 @@ Route::get('/logout','Auth\LoginController@logout');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+Route::get('/games', 'HomeController@games');
