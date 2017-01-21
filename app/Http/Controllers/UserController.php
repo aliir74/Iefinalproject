@@ -67,22 +67,24 @@ class UserController extends Controller
     public function leaderboard($gameTitle) {
         //user handle nemishe tooye javab
         $gameId = Game::where('title', $gameTitle)->get()[0]['id'];
-        $leaderboard = Leaderboard::with(['user', 'game'])->where('game_id', $gameId)->orderBy('score', 'desc')->take(10)->get();
+        $leaderboard = Leaderboard::with(['user', 'game'])->where('game_id', $gameId)->orderBy('score', 'desc')->take(1)->get();
 
         if(!(Auth::guest())) {
             $userRecord = Leaderboard::with(['user', 'game'])->where('game_id', $gameId)->where('user_id', Auth::user()->id)->get();
-            $tmp = false;
-            for($i = 0; $i < count($leaderboard->toArray()); $i++) {
-                if($leaderboard->toArray()[$i] == $userRecord->toArray()[0]) {
-                    $tmp = true;
-                    break;
+            if($userRecord->toArray() != []) {
+                $tmp = false;
+                for ($i = 0; $i < count($leaderboard->toArray()); $i++) {
+                    if ($leaderboard->toArray()[$i] == $userRecord->toArray()[0]) {
+                        $tmp = true;
+                        break;
+                    }
+                }
+                if ($tmp == false) {
+                    $leaderboard[] = $userRecord[0];
                 }
             }
-            if($tmp == false) {
-                $leaderboard[] = $userRecord[0];
-            }
         } else {
-            $leaderboard = Leaderboard::with(['user', 'game'])->where('game_id', $gameId)->orderBy('score', 'desc')->take(10)->get();
+            $leaderboard = Leaderboard::with(['user', 'game'])->where('game_id', $gameId)->orderBy('score', 'desc')->take(1)->get();
         }
         $leaderboard = ['leaderboard'=>$leaderboard];
         $response = ['ok'=>true, 'result'=>$leaderboard];
@@ -93,14 +95,14 @@ class UserController extends Controller
         if($request->has('offset')) {
             $offset = $request->get('offset');
             $gameId = Game::where('title', $gameTitle)->get()[0]['id'];
-            $comments = Comment::with(['game', 'user'])->where('game_id', '=', $gameId)->orderBy('created_at', 'desc')->take(3 + $offset)->get();
-            $slice = array_slice($comments->toArray(), 3);
+            $comments = Comment::with(['game', 'user'])->where('game_id', '=', $gameId)->orderBy('created_at', 'desc')->take(1 + $offset)->get();
+            $slice = array_slice($comments->toArray(), 1);
             $slice = ['comments' => $slice];
             $response = ['ok' => true, 'result' => $slice];
             return ['response' => $response];
         } else {
             $gameId = Game::where('title', $gameTitle)->get()[0]['id'];
-            $comments = Comment::with(['game', 'user'])->where('game_id', '=', $gameId)->orderBy('created_at', 'desc')->take(3)->get();
+            $comments = Comment::with(['game', 'user'])->where('game_id', '=', $gameId)->orderBy('created_at', 'desc')->take(1)->get();
             $comments = ['comments' => $comments];
             $response = ['ok' => true, 'result' => $comments];
             return ['response' => $response];
